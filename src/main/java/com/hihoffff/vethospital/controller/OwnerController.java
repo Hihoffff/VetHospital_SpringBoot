@@ -41,7 +41,7 @@ public class OwnerController {
     }
 
     @PatchMapping("/{id}")
-    public Owner patch(@PathVariable Long id, @RequestBody Map<String, Object> updates){
+    public Owner patch(@PathVariable Long id, @RequestBody Owner updates){
         return this.ownerService.patch(id,updates);
     }
     @DeleteMapping("/{id}")

@@ -7,7 +7,7 @@ import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
+
 
 @Service
 public class OwnerService {
@@ -31,12 +31,24 @@ public class OwnerService {
          return ownerRepository.findById(id).orElse(null);
      }
 
-     public Owner patch(Long id, Map<String,Object> updates){
+     public Owner patch(Long id, Owner updates){
          return ownerRepository.findById(id).map(
                  owner -> {
-                     if(updates.containsKey("name")){owner.setName(updates.get("name").toString());}
-                     if(updates.containsKey("phoneNumber")){owner.setPhoneNumber(updates.get("phoneNumber").toString());}
-                     if(updates.containsKey("pets")){owner.setPets((List<Pet>) updates.get("pets"));}
+                     if(updates.getName() != null){
+                         owner.setName(updates.getName());
+                     }
+                     if(updates.getPhoneNumber() != null){
+                         owner.setPhoneNumber(updates.getPhoneNumber());
+                     }
+                     if(updates.getPets() != null){
+                         if(!updates.getPets().isEmpty()){
+                             owner.getPets().clear();  //для очистки объектов из БД
+                             for(Pet pet:updates.getPets()){
+                                 pet.setOwner(owner);
+                                 owner.getPets().add(pet);
+                             }
+                         }
+                     }
                      return ownerRepository.save(owner);
                  }
          ).orElse(null);
@@ -44,9 +56,17 @@ public class OwnerService {
      public Owner update(Long id, Owner newOwner){
         return ownerRepository.findById(id).map(
                 owner -> {
+
                     owner.setName(newOwner.getName());
-                    owner.setPets(newOwner.getPets());
                     owner.setPhoneNumber(newOwner.getPhoneNumber());
+                    if(newOwner.getPets()!=null){
+                        owner.getPets().clear();  //для очистки объектов из БД
+                        for(Pet pet:newOwner.getPets()){
+                            pet.setOwner(owner);
+                            owner.getPets().add(pet);
+                        }
+
+                    }
                     return ownerRepository.save(owner);
                 }
         ).orElse(null);
