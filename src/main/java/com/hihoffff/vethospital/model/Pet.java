@@ -1,9 +1,7 @@
 package com.hihoffff.vethospital.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 
 @Entity
 public class Pet {
@@ -13,10 +11,14 @@ public class Pet {
     private String name;
     private Byte age;
     private String type;
-    private Long ownerId;
 
-    public Long getOwnerId() {return ownerId;}
-    public void setOwnerId(Long ownerId) {this.ownerId = ownerId;}
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    @JsonBackReference
+    private Owner owner;
+
+    public Owner getOwner() {return owner;}
+    public void setOwner(Owner owner) {this.owner = owner;}
     public String getName() {return name;}
     public void setName(String name) {this.name = name;}
     public Byte getAge() {return age;}
@@ -24,14 +26,21 @@ public class Pet {
     public String getType() {return type;}
     public void setType(String type) {this.type = type;}
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public Long getId(){
+        return id;
+    }
+
     public Pet() {
     }
-    public Pet(Long id, String name, Byte age, String type, Long ownerId) {
+    public Pet(Long id, String name, Byte age, String type, Owner owner) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.type = type;
-        this.ownerId = ownerId;
+        this.owner = owner;
 
     }
 }
