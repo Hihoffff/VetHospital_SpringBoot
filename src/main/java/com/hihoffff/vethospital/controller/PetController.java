@@ -36,7 +36,7 @@ public class PetController {
     }
 
     @PatchMapping("/{id}")
-    public Pet patch(@PathVariable Long id, @RequestBody Map<String, Object> updates){
+    public Pet patch(@PathVariable Long id, @RequestBody Pet updates){
         return this.petService.patch(id,updates);
     }
     @DeleteMapping("/{id}")

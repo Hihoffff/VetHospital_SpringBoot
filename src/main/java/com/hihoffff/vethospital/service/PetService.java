@@ -25,12 +25,18 @@ public class PetService {
         return petRepository.findById(id).orElse(null);
     }
 
-    public Pet patch(Long id, Map<String,Object> updates){
+    public Pet patch(Long id, Pet updatedPet){
         return petRepository.findById(id).map(
                 pet -> {
-                    if(updates.containsKey("name")){pet.setName(updates.get("name").toString());}
-                    if(updates.containsKey("age")){pet.setAge((Byte)updates.get("age"));}
-                    if(updates.containsKey("type")){pet.setType(updates.get("type").toString());}
+                        if(updatedPet.getName() != null){
+                            pet.setName(updatedPet.getName());
+                        }
+                        if(updatedPet.getAge() != null){
+                            pet.setAge(updatedPet.getAge());
+                        }
+                        if(updatedPet.getType() != null){
+                            pet.setType(updatedPet.getType());
+                        }
 
                     return petRepository.save(pet);
                 }
