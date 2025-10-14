@@ -29,9 +29,6 @@ public class OwnerController {
 
     @PostMapping
     public Owner addNew(@RequestBody Owner owner){
-        for(Pet obj: owner.getPets()) {
-            System.out.println(obj.getOwner());
-        }
         return this.ownerService.add(owner);
     }
 
